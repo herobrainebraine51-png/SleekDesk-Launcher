@@ -12,11 +12,48 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Generate Clean XML Files
+      - name: Generate Clean Files
         run: |
           mkdir -p app/src/main/res/values
+          mkdir -p app/src/main/java/com/example/sleekdesklauncher
+
           echo "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPG1hbmlmZXN0IHhtbG5zOmFuZHJvaWQ9Imh0dHA6Ly9zY2hlbWFzLmFuZHJvaWQuY29tL2Fway9yZXMvYW5kcm9pZCI+CiAgICA8dXNlcy1wZXJtaXNzaW9uIGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5wZXJtaXNzaW9uLlFVRVJZX0FMTF9QQUNLQUdFUyIgLz4KICAgIDxhcHBsaWNhdGlvbgogICAgICAgIGFuZHJvaWQ6YWxsb3dCYWNrdXA9InRydWUiCiAgICAgICAgYW5kcm9pZDpsYWJlbD0iU2xlZWtEZXNrIExhdW5jaGVyIgogICAgICAgIGFuZHJvaWQ6dGhlbWU9IkBzdHlsZS9UaGVtZS5TbGVla0Rlc2tXYWxscGFwZXIiPgogICAgICAgIDxhY3Rpdml0eQogICAgICAgICAgICBhbmRyb2lkOm5hbWU9Ii5NYWluQWN0aXZpdHkiCiAgICAgICAgICAgIGFuZHJvaWQ6ZXhwb3J0ZWQ9InRydWUiCiAgICAgICAgICAgIGFuZHJvaWQ6bGF1bmNoTW9kZT0ic2luZ2xlVGFzayIKICAgICAgICAgICAgYW5kcm9pZDpzdGF0ZU5vdE5lZWRlZD0idHJ1ZSIKICAgICAgICAgICAgYW5kcm9pZDp3aW5kb3dTb2Z0SW5wdXRNb2RlPSJhZGp1c3RQYW4iPgogICAgICAgICAgICA8aW50ZW50LWZpbHRlcj4KICAgICAgICAgICAgICAgIDxhY3Rpb24gYW5kcm9pZDpuYW1lPSJhbmRyb2lkLmludGVudC5hY3Rpb24uTUFJTiIgLz4KICAgICAgICAgICAgICAgIDxjYXRlZ29yeSBhbmRyb2lkOm5hbWU9ImFuZHJvaWQuaW50ZW50LmNhdGVnb3J5LkhPTUUiIC8+CiAgICAgICAgICAgICAgICA8Y2F0ZWdvcnkgYW5kcm9pZDpuYW1lPSJhbmRyb2lkLmludGVudC5jYXRlZ29yeS5ERUZBVUxUIiAvPgogICAgICAgICAgICAgICAgPGNhdGVnb3J5IGFuZHJvaWQ6bmFtZT0iYW5kcm9pZC5pbnRlbnQuY2F0ZWdvcnkuTEFVTkNIRVIiIC8+CiAgICAgICAgICAgIDwvaW50ZW50LWZpbHRlcj4KICAgICAgICA8L2FjdGl2aXR5PgogICAgPC9hcHBsaWNhdGlvbj4KPC9tYW5pZmVzdD4K" | base64 -d > app/src/main/AndroidManifest.xml
+
           echo "PHJlc291cmNlcz4KICAgIDxzdHlsZSBuYW1lPSJUaGVtZS5TbGVla0Rlc2tXYWxscGFwZXIiIHBhcmVudD0iVGhlbWUuQXBwQ29tcGF0Lk5vQWN0aW9uQmFyIj4KICAgICAgICA8aXRlbSBuYW1lPSJhbmRyb2lkOndpbmRvd1Nob3dXYWxscGFwZXIiPnRydWU8L2l0ZW0+CiAgICAgICAgPGl0ZW0gbmFtZT0iYW5kcm9pZDp3aW5kb3dCYWNrZ3JvdW5kIj5AYW5kcm9pZDpjb2xvci90cmFuc3BhcmVudDwvaXRlbT4KICAgICAgICA8aXRlbSBuYW1lPSJhbmRyb2lkOmNvbG9yQmFja2dyb3VuZENhY2hlSGludCI+QG51bGw8L2l0ZW0+CiAgICAgICAgPGl0ZW0gbmFtZT0iYW5kcm9pZDpzdGF0dXNCYXJDb2xvciI+QGFuZHJvaWQ6Y29sb3IvdHJhbnNwYXJlbnQ8L2l0ZW0+CiAgICAgICAgPGl0ZW0gbmFtZT0iYW5kcm9pZDpuYXZpZ2F0aW9uQmFyQ29sb3IiPkBhbmRyb2lkOmNvbG9yL3RyYW5zcGFyZW50PC9pdGVtPgogICAgPC9zdHlsZT4KPC9yZXNvdXJjZXM+Cg==" | base64 -d > app/src/main/res/values/themes.xml
+
+          python3 -c '
+          p = "app/src/main/java/com/example/sleekdesklauncher/MainActivity.kt"
+          txt = open(p).read()
+          idx = txt.find("@Composable\nfun AppIconItem")
+          if idx != -1:
+              txt = txt[:idx]
+          idx2 = txt.rfind("}")
+          txt = txt[:idx2+1] + """
+
+          @Composable
+          fun AppIconItem(app: AppInfo, onClick: () -> Unit) {
+              Column(
+                  horizontalAlignment = Alignment.CenterHorizontally,
+                  modifier = Modifier.clickable { onClick() }.padding(4.dp)
+              ) {
+                  Image(
+                      bitmap = app.icon.toBitmap(128, 128).asImageBitmap(),
+                      contentDescription = app.label,
+                      modifier = Modifier.size(54.dp)
+                  )
+                  Spacer(modifier = Modifier.height(6.dp))
+                  Text(
+                      text = app.label,
+                      color = Color.White,
+                      fontSize = 12.sp,
+                      maxLines = 1,
+                      overflow = TextOverflow.Ellipsis
+                  )
+              }
+          }
+          """
+          open(p, "w").write(txt)
+          '
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
