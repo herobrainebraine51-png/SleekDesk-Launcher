@@ -106,7 +106,7 @@ fun SleekLauncherScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0x66000000), RoundedCornerShape(16.dp))
+                .background(Color.Black.copy(alpha = 0.4f), RoundedCornerShape(16.dp))
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -117,7 +117,7 @@ fun SleekLauncherScreen(
             Button(
                 onClick = onSwitchMode,
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xCC0078D4))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0, 120, 212, 220))
             ) {
                 Text("وضع الكمبيوتر 💻", color = Color.White)
             }
@@ -180,7 +180,7 @@ fun DesktopModeScreen(
                     .width(340.dp)
                     .height(450.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xE61A1A1A))
+                colors = CardDefaults.cardColors(containerColor = Color(26, 26, 26, 235))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(
@@ -193,7 +193,7 @@ fun DesktopModeScreen(
                             isStartMenuOpen = false
                             onOpenIconSettings()
                         }) {
-                            Text("🎨 الأيقونات", color = Color(0xFF4CC2FF))
+                            Text("🎨 الأيقونات", color = Color(76, 194, 255))
                         }
                     }
                     Spacer(modifier = Modifier.height(12.dp))
@@ -218,7 +218,7 @@ fun DesktopModeScreen(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .height(54.dp)
-                .background(Color(0xCC141414))
+                .background(Color(20, 20, 20, 210))
                 .padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -227,7 +227,7 @@ fun DesktopModeScreen(
                 Button(
                     onClick = { isStartMenuOpen = !isStartMenuOpen },
                     shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0078D4))
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0, 120, 212))
                 ) {
                     Text("⊞ ابدأ", color = Color.White, fontWeight = FontWeight.Bold)
                 }
@@ -257,4 +257,4 @@ fun IconPackDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        containerColor = Color(0xFF202020),
+        containerColor = Color(32, 32, 32),
