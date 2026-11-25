@@ -12,6 +12,46 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Fix Manifest and Themes automatically
+        run: |
+          mkdir -p app/src/main/res/values
+          cat << 'EOF' > app/src/main/AndroidManifest.xml
+          <?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://android.com">
+              <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+              <application
+                  android:allowBackup="true"
+                  android:label="SleekDesk Launcher"
+                  android:theme="@style/Theme.SleekDeskWallpaper">
+                  <activity
+                      android:name=".MainActivity"
+                      android:exported="true"
+                      android:launchMode="singleTask"
+                      android:stateNotNeeded="true"
+                      android:windowSoftInputMode="adjustPan">
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.HOME" />
+                          <category android:name="android.intent.category.DEFAULT" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>
+          EOF
+
+          cat << 'EOF' > app/src/main/res/values/themes.xml
+          <resources>
+              <style name="Theme.SleekDeskWallpaper" parent="Theme.AppCompat.NoActionBar">
+                  <item name="android:windowShowWallpaper">true</item>
+                  <item name="android:windowBackground">@android:color/transparent</item>
+                  <item name="android:colorBackgroundCacheHint">@null</item>
+                  <item name="android:statusBarColor">@android:color/transparent</item>
+                  <item name="android:navigationBarColor">@android:color/transparent</item>
+              </style>
+          </resources>
+          EOF
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
