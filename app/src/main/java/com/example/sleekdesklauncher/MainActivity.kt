@@ -258,3 +258,24 @@ fun IconPackDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         containerColor = Color(32, 32, 32),
+@Composable
+fun AppIconItem(app: AppInfo, onClick: () -> Unit) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.clickable { onClick() }.padding(4.dp)
+    ) {
+        Image(
+            bitmap = app.icon.toBitmap(128, 128).asImageBitmap(),
+            contentDescription = app.label,
+            modifier = Modifier.size(54.dp)
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(
+            text = app.label,
+            color = Color.White,
+            fontSize = 12.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
